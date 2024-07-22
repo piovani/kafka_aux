@@ -8,15 +8,18 @@ import (
 	"github.com/piovani/kafka_aux/internal/dto"
 	"github.com/piovani/kafka_aux/internal/model"
 	"github.com/piovani/kafka_aux/pkg/cache"
+	"github.com/piovani/kafka_aux/pkg/queue"
 )
 
 type MessageService struct {
 	cache *cache.Cache
+	queue *queue.Queue
 }
 
 func NewMessageService() *MessageService {
 	return &MessageService{
 		cache: cache.NewCache(),
+		queue: queue.NewQueue(),
 	}
 }
 
@@ -64,5 +67,10 @@ func (s *MessageService) Create(messageDto dto.MessageDto) (dto.MessageDto, erro
 	}
 
 	messageDto.ID = message.ID
+
+	if err := s.queue.Publish(message.Content); err != nil {
+		return messageDto, err
+	}
+
 	return messageDto, nil
 }

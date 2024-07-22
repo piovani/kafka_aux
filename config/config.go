@@ -12,6 +12,10 @@ type Config struct {
 	// REDIS
 	RedisHost     string `envconfig:"REDIS_HOST"`
 	RedisPassword string `envconfig:"REDIS_PASSWORD"`
+
+	// KAFKA
+	KafkaHost  string `envconfig:"KAFKA_HOST"`
+	KafkaTopic string `envconfig:"KAFKA_TOPIC"`
 }
 
 var Env Config
