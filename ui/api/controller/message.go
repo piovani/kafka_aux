@@ -25,7 +25,13 @@ func NewMessageController() *MessageController {
 }
 
 func (c *MessageController) List(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{"message": "ok"})
+	list, err := c.messageService.All()
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, dto.GetErrorOutput(ErrInputCreateMessage))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, list)
 }
 
 func (c *MessageController) Create(ctx *gin.Context) {

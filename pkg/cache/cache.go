@@ -29,3 +29,9 @@ func (c *Cache) Set(key string, value any, ttl time.Duration) error {
 func (c *Cache) Get(key string) (string, error) {
 	return c.redis.Get(context.TODO(), key).Result()
 }
+
+func (c *Cache) GetAllKeys() (keys []string, err error) {
+	cursor := uint64(0)		
+	keys, cursor, err = c.redis.Scan(context.TODO(), cursor, "", 0).Result()
+	return keys, err
+}
